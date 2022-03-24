@@ -5,10 +5,19 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ProductapiRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *      normalizationContext={"groups"={"read:productapi"}},
+ *      collectionOperations={"get","post"},
+ *      itemOperations={"put","delete","get"},
+ * )
  * @ORM\Entity(repositoryClass=ProductapiRepository::class)
+ * @ApiFilter(SearchFilter::class, properties= {"name" : "partial"})
+ * 
  */
 class Productapi
 {
@@ -21,6 +30,7 @@ class Productapi
 
     /**
      * @ORM\Column(type="string", length=25, nullable=true)
+     * @Groups({"read:productapi"})
      */
     private $name;
 
